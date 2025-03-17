@@ -3,6 +3,7 @@ package com.zerobase.weather.service;
 import com.zerobase.weather.entity.Weather;
 import com.zerobase.weather.exception.WeatherApiException;
 import com.zerobase.weather.repository.WeatherUpdateRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,7 @@ public class WeatherUpdateService {
     private final RestClient restClient = RestClient.create();
 
 
+    @Transactional
     @Scheduled(cron="0 0 1 * * *")
     public void updateWeather(){
         log.info("Update weather data");
