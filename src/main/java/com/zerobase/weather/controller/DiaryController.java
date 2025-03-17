@@ -2,6 +2,7 @@ package com.zerobase.weather.controller;
 
 import com.zerobase.weather.dto.CreateDiaryReqsDto;
 import com.zerobase.weather.dto.ResponseDto;
+import com.zerobase.weather.dto.UpdateDairyReqDto;
 import com.zerobase.weather.enums.CustomeException;
 import com.zerobase.weather.enums.Description;
 import com.zerobase.weather.exception.CustomException;
@@ -42,14 +43,16 @@ public class DiaryController {
     }
 
     @PutMapping(value = "/update/diary")
-    public ResponseEntity<ResponseDto> updateDiary(){
-        ResponseDto response = new ResponseDto(HttpStatus.CREATED, Description.SUCCESS);
+    public ResponseEntity<ResponseDto> updateDiary(@RequestBody UpdateDairyReqDto updateDairyReqDto){
+        if(!DateValidator.isValidDate(updateDairyReqDto.getDate())) {throw new CustomException(CustomeException.INVALID_REQUEST);}
+        ResponseDto response = diaryDetailService.updateDiary(updateDairyReqDto);
         return new ResponseEntity<>(response, response.getStatus());
     }
 
     @DeleteMapping(value="/delete/diary")
-    public ResponseEntity<ResponseDto> deleteDiary(){
-        ResponseDto response = new ResponseDto(HttpStatus.CREATED, Description.SUCCESS);
+    public ResponseEntity<ResponseDto> deleteDiary(@RequestParam String date){
+        if(!DateValidator.isValidDate(date)) {throw new CustomException(CustomeException.INVALID_REQUEST);}
+        ResponseDto response = diaryDetailService.deleteDiary(date);
         return new ResponseEntity<>(response, response.getStatus());
     }
 }

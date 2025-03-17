@@ -13,4 +13,6 @@ public interface DiaryRepository extends JpaRepository<Diary, UUID> {
     Optional<Diary> findFirstByDate(LocalDate date);
 
     Optional<List<Diary>> findAllByDateBetween(LocalDate dateBefore, LocalDate dateAfter);
+
+    void deleteAllByDate(LocalDate date);
 }

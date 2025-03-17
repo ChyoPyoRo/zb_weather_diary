@@ -25,4 +25,8 @@ public class Diary {
     private double temperature;
     private String text;
     private LocalDate date;
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }

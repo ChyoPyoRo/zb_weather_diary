@@ -1,9 +1,6 @@
 package com.zerobase.weather.service;
 
-import com.zerobase.weather.dto.CreateDiaryReqsDto;
-import com.zerobase.weather.dto.ReadDiariesRespDto;
-import com.zerobase.weather.dto.ReadDiaryRespDto;
-import com.zerobase.weather.dto.ResponseDto;
+import com.zerobase.weather.dto.*;
 import com.zerobase.weather.entity.Diary;
 import com.zerobase.weather.entity.Weather;
 import com.zerobase.weather.enums.CustomeException;
@@ -49,10 +46,9 @@ public class DiaryDetailService {
     @Transactional
     public ResponseDto<?> findDiaryOnDate(String date){
         LocalDate targetDate = LocalDate.parse(date);
-        Optional<Diary> diary = diaryDetailRepository.findByDate(targetDate);
+        Diary diary = diaryDetailRepository.findByDate(targetDate);
         //일기 없을 때 null 처리
-        if(diary.isEmpty()) throw new CustomException(CustomeException.DIARY_NOT_EXIST);
-        ReadDiaryRespDto result = ReadDiaryRespDto.from(diary.get());
+        ReadDiaryRespDto result = ReadDiaryRespDto.from(diary);
         return new ResponseDto<>(HttpStatus.OK, Description.SUCCESS, result);
     }
 
@@ -64,5 +60,18 @@ public class DiaryDetailService {
         if(diaryList.isEmpty()) throw new CustomException(CustomeException.DIARY_NOT_EXIST);
         ReadDiariesRespDto responseBody = new ReadDiariesRespDto(diaryList.get());
         return new ResponseDto<>(HttpStatus.OK, Description.SUCCESS, responseBody);
+    }
+
+    @Transactional
+    public ResponseDto<?> updateDiary(UpdateDairyReqDto requestDto){
+        LocalDate targetDate = LocalDate.parse(requestDto.getDate());
+        diaryDetailRepository.updateDiary(targetDate, requestDto.getText());
+        return ResponseDto.builder().description(Description.SUCCESS).status(HttpStatus.OK).build();
+    }
+    @Transactional
+    public ResponseDto<?> deleteDiary(String date){
+        LocalDate targetDate = LocalDate.parse(date);
+        diaryDetailRepository.deleteDiary(targetDate);
+        return ResponseDto.builder().description(Description.SUCCESS).status(HttpStatus.OK).build();
     }
 }
