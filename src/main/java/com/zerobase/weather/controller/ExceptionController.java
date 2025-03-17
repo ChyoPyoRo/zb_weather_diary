@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -20,6 +21,14 @@ public class ExceptionController {
         return buildErrorResponse(ex.getStatus(), ex.getErrorCode(), ex.getMessage());
     }
 
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<?> handleHttpMessageNotReadableException(MissingServletRequestParameterException ex) {
+        return buildErrorResponse(
+                CustomeException.INVALID_REQUEST.getStatus(),
+                CustomeException.INVALID_REQUEST.getErrorCode(),
+                CustomeException.INVALID_REQUEST.getErrorMessage()
+        );
+    }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {

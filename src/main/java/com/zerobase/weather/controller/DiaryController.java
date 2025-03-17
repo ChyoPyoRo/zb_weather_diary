@@ -7,6 +7,7 @@ import com.zerobase.weather.enums.Description;
 import com.zerobase.weather.exception.CustomException;
 import com.zerobase.weather.service.DiaryDetailService;
 import com.zerobase.weather.utils.DateValidator;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +27,17 @@ public class DiaryController {
     }
 
     @GetMapping(value = "/read/diary")
-    public ResponseEntity<ResponseDto> readDiary() {
-        ResponseDto response = new ResponseDto(HttpStatus.CREATED, Description.SUCCESS);
-        throw new RuntimeException();
-//        return new ResponseEntity<>(response, response.getStatus());
+    public ResponseEntity<ResponseDto> readDiary(@RequestParam String date) {
+        if(date == null || !DateValidator.isValidDate(date)) {throw new CustomException(CustomeException.INVALID_REQUEST);}
+        ResponseDto response = diaryDetailService.findDiaryOnDate(date);
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
     @GetMapping(value="/read/diaries")
-    public ResponseEntity<ResponseDto> readDiaries() {
-        ResponseDto response = new ResponseDto(HttpStatus.CREATED, Description.SUCCESS);
+    public ResponseEntity<ResponseDto> readDiaries(@RequestParam String startDate, @RequestParam String endDate) {
+        if(startDate == null || !DateValidator.isValidDate(startDate)) {throw new CustomException(CustomeException.INVALID_REQUEST);}
+        if(endDate == null || !DateValidator.isValidDate(endDate)) {throw new CustomException(CustomeException.INVALID_REQUEST);}
+        ResponseDto response = diaryDetailService.findAllDiaryOnDistance(startDate,endDate);
         return new ResponseEntity<>(response, response.getStatus());
     }
 
