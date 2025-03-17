@@ -1,16 +1,27 @@
 package com.zerobase.weather.controller;
 
+import com.zerobase.weather.dto.CreateDiaryReqsDto;
 import com.zerobase.weather.dto.ResponseDto;
+import com.zerobase.weather.enums.CustomeException;
 import com.zerobase.weather.enums.Description;
+import com.zerobase.weather.exception.CustomException;
+import com.zerobase.weather.service.DiaryDetailService;
+import com.zerobase.weather.utils.DateValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class DiaryController {
+    @Autowired
+    private DiaryDetailService diaryDetailService;
+
+
     @PostMapping(value = "/create/diary")
-    public ResponseEntity<ResponseDto> createDiary() {
-        ResponseDto response = new ResponseDto(HttpStatus.CREATED, Description.SUCCESS);
+    public ResponseEntity<ResponseDto> createDiary(@RequestBody CreateDiaryReqsDto requestDto) {
+        if(!DateValidator.isValidDate(requestDto.getDate())) {throw new CustomException(CustomeException.INVALID_REQUEST);}
+        ResponseDto response = diaryDetailService.createDiary(requestDto);
         return new ResponseEntity<>(response, response.getStatus());
     }
 

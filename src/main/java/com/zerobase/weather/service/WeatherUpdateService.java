@@ -1,7 +1,8 @@
 package com.zerobase.weather.service;
 
 import com.zerobase.weather.entity.Weather;
-import com.zerobase.weather.exception.WeatherApiException;
+import com.zerobase.weather.enums.CustomeException;
+import com.zerobase.weather.exception.CustomException;
 import com.zerobase.weather.repository.WeatherUpdateRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class WeatherUpdateService {
 
     private Weather getWeatherFromApi(){
         if(apiKey == null || apiKey.isEmpty()){
-            throw new WeatherApiException("API_KEY_NOT_FOUND");
+            throw new CustomException(CustomeException.API_KEY_NOT_FOUND);
         }
         Map response = restClient.get()
                 .uri(uriBuilder -> uriBuilder
@@ -62,7 +63,7 @@ public class WeatherUpdateService {
                     .temperature(temp)
                     .build();
         }catch(NullPointerException ex){
-            throw new WeatherApiException("API_CALL_FAILED");
+            throw new CustomException(CustomeException.API_CALL_FAILED);
         }
     }
 }

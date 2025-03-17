@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.4.3'
+	id 'org.springframework.boot' version '3.3.9'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -35,11 +35,8 @@ dependencies {
 	// Logback
 	implementation 'ch.qos.logback:logback-classic:1.5.16'
 
-	// OpenFeign (Spring Cloud)
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-
 	// MySQL Connector
-	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// Lombok
 	compileOnly 'org.projectlombok:lombok'
