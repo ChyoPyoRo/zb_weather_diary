@@ -16,7 +16,7 @@ public class ResponseDto<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Integer errorCode;
+    private String errorCode;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String errorMessage;
 
@@ -26,7 +26,8 @@ public class ResponseDto<T> {
         this.description = description;
     }
     //fail
-    public ResponseDto(HttpStatus status, Description description, Integer errorCode, String errorMessage){
+    @Builder
+    public ResponseDto(HttpStatus status, Description description, String errorCode, String errorMessage){
         this.status = status;
         this.description = description;
         this.errorCode = errorCode;

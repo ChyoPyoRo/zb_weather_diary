@@ -17,7 +17,8 @@ public class DiaryController {
     @GetMapping(value = "/read/diary")
     public ResponseEntity<ResponseDto> readDiary() {
         ResponseDto response = new ResponseDto(HttpStatus.CREATED, Description.SUCCESS);
-        return new ResponseEntity<>(response, response.getStatus());
+        throw new RuntimeException();
+//        return new ResponseEntity<>(response, response.getStatus());
     }
 
     @GetMapping(value="/read/diaries")
